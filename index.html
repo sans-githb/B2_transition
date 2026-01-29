@@ -1,32 +1,52 @@
-<!doctype html><html><meta charset="utf-8"><title>Split Image</title>
+<!doctype html>
+<html>
+<meta charset="utf-8">
+<title>Split Image</title>
 <style>
-  body{font-family:Arial;padding:18px} .top{display:flex;gap:10px;align-items:center}
-  input{width:70px;padding:6px} button{padding:7px 12px;cursor:pointer}
-  #b{width:min(860px,96vw);aspect-ratio:16/7;border:2px solid #000;margin-top:12px;display:grid;overflow:hidden}
-  .t{background:var(--img) no-repeat;border:2px solid #ffea00;box-sizing:border-box;cursor:pointer;
-     transition:.25s;opacity:1;transform:scale(1)}
+  body{
+    font-family:Arial;
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;              /* INI yang ngatur jarak input-gambar */
+    padding:18px;
+  }
+  .top{display:flex;gap:10px;align-items:center}
+  input{width:70px;padding:6px}
+  button{padding:7px 12px;cursor:pointer}
+
+  #b{
+    width:min(860px,96vw);
+    aspect-ratio:16/7;
+    border:2px solid #000;
+    display:grid;
+    overflow:hidden;
+  }
+
+  .t{background:var(--img) no-repeat;border:2px solid #ffea00;box-sizing:border-box;cursor:pointer;transition:.25s;opacity:1;transform:scale(1)}
   .t.h{opacity:0;transform:scale(.75) rotate(2deg);pointer-events:none}
 </style>
 
 <div class="top">X:<input id="x" type="number" min="1" max="50" placeholder="5">
-Y:<input id="y" type="number" min="1" max="50" placeholder="3">
-<button id="s">Split Image</button></div>
+  Y:<input id="y" type="number" min="1" max="50" placeholder="3">
+  <button id="s">Split Image</button>
+</div>
 <div id="b"></div>
 
 <script>
-  const img='url(image/image.jpg)',
-        b=document.getElementById('b'), x=document.getElementById('x'), y=document.getElementById('y'),
-        split=(X,Y)=>{X=Math.max(1,Math.min(50,X|0));Y=Math.max(1,Math.min(50,Y|0));
-          b.style.cssText+=`grid-template-columns:repeat(${X},1fr);grid-template-rows:repeat(${Y},1fr)`;
-          b.innerHTML=Array.from({length:X*Y},(_,i)=>`<div class=t style="--img:${img};background-size:${X*100}% ${Y*100}%;
-            background-position:${(i%X)*100/(X-1||1)}% ${(i/X|0)*100/(Y-1||1)}%"></div>`).join('');
-        };
-
+  const img='url(image/image.jpg)', b=document.getElementById('b'), x=document.getElementById('x'), y=document.getElementById('y'),
+  split=(X,Y)=>{X=Math.max(1,Math.min(50,X|0));Y=Math.max(1,Math.min(50,Y|0));
+    b.style.cssText+=`grid-template-columns:repeat(${X},1fr);grid-template-rows:repeat(${Y},1fr)`;
+    b.innerHTML=Array.from({length:X*Y},(_,i)=>`<div class=t style="--img:${img};background-size:${X*100}% ${Y*100}%;
+      background-position:${(i%X)*100/(X-1||1)}% ${(i/X|0)*100/(Y-1||1)}%"></div>`).join('');
+  };
   document.addEventListener('click',e=>{
-    if(e.target.id==='s') split(+x.value||+x.placeholder, +y.value||+y.placeholder);
+    if(e.target.id==='s') split(+x.value||+x.placeholder,+y.value||+y.placeholder);
     if(e.target.classList.contains('t')) e.target.classList.add('h');
   });
-
   split(5,3);
 </script>
 </html>
